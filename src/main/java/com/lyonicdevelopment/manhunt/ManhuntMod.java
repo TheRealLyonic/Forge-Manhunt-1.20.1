@@ -1,6 +1,10 @@
 package com.lyonicdevelopment.manhunt;
 
+import com.lyonicdevelopment.manhunt.item.ModCreativeModeTabs;
+import com.lyonicdevelopment.manhunt.item.ModItemProperties;
+import com.lyonicdevelopment.manhunt.item.ModItems;
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -19,11 +23,14 @@ import org.slf4j.Logger;
 public class ManhuntMod
 {
     public static final String MOD_ID = "manhunt";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public ManhuntMod()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ModItems.register(modEventBus);
+        ModCreativeModeTabs.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
@@ -38,7 +45,9 @@ public class ManhuntMod
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-
+        if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES){
+            event.accept(ModItems.TRACKING_COMPASS);
+        }
     }
 
     @SubscribeEvent
@@ -53,7 +62,9 @@ public class ManhuntMod
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-
+            event.enqueueWork(() -> {
+                ModItemProperties.addTrackingCompassProperties();
+            });
         }
     }
 }
