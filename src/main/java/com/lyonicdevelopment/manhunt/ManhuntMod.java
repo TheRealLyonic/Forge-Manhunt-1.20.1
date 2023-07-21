@@ -3,6 +3,7 @@ package com.lyonicdevelopment.manhunt;
 import com.lyonicdevelopment.manhunt.item.ModCreativeModeTabs;
 import com.lyonicdevelopment.manhunt.item.ModItemProperties;
 import com.lyonicdevelopment.manhunt.item.ModItems;
+import com.lyonicdevelopment.manhunt.sound.ModSounds;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,6 +32,7 @@ public class ManhuntMod
 
         ModItems.register(modEventBus);
         ModCreativeModeTabs.register(modEventBus);
+        ModSounds.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 

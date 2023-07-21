@@ -1,0 +1,8 @@
+{
+  "manhunt_victory": {
+    "subtitles": "sounds.manhunt.manhunt_victory",
+    "sounds": [
+      "manhunt:manhunt_victory"
+    ]
+  }
+}
