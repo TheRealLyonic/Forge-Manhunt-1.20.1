@@ -52,7 +52,11 @@ public class PlayerCompass extends CompassItem {
                     trackedPlayer = players.get(0);
                 }
 
-                pPlayer.sendSystemMessage(Component.literal("Now tracking " + trackedPlayer.getScoreboardName()).withStyle(ChatFormatting.AQUA));
+                try{
+                    pPlayer.sendSystemMessage(Component.literal("Now tracking " + trackedPlayer.getScoreboardName()).withStyle(ChatFormatting.AQUA));
+                }catch(NullPointerException e){
+                    pPlayer.sendSystemMessage(Component.literal("The player you're tracking has entered a different dimension.").withStyle(ChatFormatting.LIGHT_PURPLE));
+                }
             }
 
         }
@@ -65,6 +69,10 @@ public class PlayerCompass extends CompassItem {
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected) {
         if (pLevel.isClientSide() && pEntity instanceof Player player) {
 
+            if(players != null && players.size() > 0){
+                players.clear();
+            }
+
             for (PlayerInfo playerInfo : Minecraft.getInstance().getConnection().getListedOnlinePlayers()) {
                 if (!playerInfo.getProfile().getName().equals(pEntity.getScoreboardName())) {
                     players.add(player.level().getPlayerByUUID(playerInfo.getProfile().getId()));
@@ -72,8 +80,20 @@ public class PlayerCompass extends CompassItem {
             }
 
             if(trackedPlayer == null){
-                trackedPos = GlobalPos.of(player.level().dimension(), new BlockPos(0, 0, 0));
+
+                if(lastKnownPos != null){
+                    trackedPos = GlobalPos.of(player.level().dimension(), lastKnownPos);
+                }else{
+                    trackedPos = GlobalPos.of(player.level().dimension(), new BlockPos(0, 0, 0));
+                }
+
             }else if(trackedPlayer.level().dimension().equals(player.level().dimension())){
+
+                if(trackedPlayer.isDeadOrDying()){
+                    trackedPlayer = null;
+                    return;
+                }
+
                 lastKnownPos = trackedPlayer.blockPosition();
                 trackedPos = GlobalPos.of(trackedPlayer.level().dimension(), lastKnownPos);
             }else{
