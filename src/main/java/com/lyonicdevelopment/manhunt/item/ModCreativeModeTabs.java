@@ -15,9 +15,9 @@ public class ModCreativeModeTabs {
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ManhuntMod.MOD_ID);
 
     public static final RegistryObject<CreativeModeTab> MANHUNT_TAB = CREATIVE_MODE_TABS.register("manhunt_tab",
-            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.TRACKING_COMPASS.get())).title(Component.
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.PLAYER_COMPASS.get())).title(Component.
                     translatable("creativetab.manhunt_tab")).displayItems((displayParameters, event) -> {
-                        event.accept(ModItems.TRACKING_COMPASS.get());
+                        event.accept(ModItems.PLAYER_COMPASS.get());
             }).build());
 
     public static void register(IEventBus eventBus){
